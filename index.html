@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>LEDs - Sensors test app</title>
+        <script src="http://assets.meld.cx/agent/1.0.41/Agent.js"></script>
+        <style>
+            html, body {overflow-y: visible;}
+            table{
+                border: 1px solid black;
+                table-layout: auto;
+                width: auto;
+            }
+        </style>
+    </head>
+    
+    <body id = 'body'>
+
+        <label id = 'header'><h2>Please Wait !!!</h2></label>
+        <table id = "commandsTable" width="100%" border="1" cellpadding="2" cellspacing="2" style="background-color: #ffffff;">
+            <thead>
+                <tr>
+                    <th>Command Name</th>
+                    <th>Options</th>
+                    <th>Click</th>
+                    <th>Command results</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr>
+                    <td>LED channel 1</td>
+                    <td>
+                        <label>select color:</label>
+                        <select id="ch1" disabled>
+                            <option value="black">Off</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="blue">Blue</option>
+                            <option value="white">White</option>                           
+                        </select>                    
+                    </td>                    
+                    <td>
+                        <button id= "bt1" type="button" onclick="ledCommand(1)" disabled>run</button>
+                    </td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>LED channel 2</td>
+                    <td>
+                        <label>select color:</label>
+                        <select id="ch2" disabled>
+                            <option value="black">Off</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="blue">Blue</option>
+                            <option value="white">White</option>   
+                        </select>                      
+                    </td>                    
+                    <td>
+                        <button id= "bt2" type="button" onclick="ledCommand(2)" disabled>run</button>
+                    </td>
+                    <td></td>                    
+                </tr>
+                <tr>
+                    <td>LED channel 3</td>
+                    <td>
+                        <label>select color:</label>
+                        <select id="ch3" disabled>
+                            <option value="black">Off</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="blue">Blue</option>
+                            <option value="white">White</option>                              
+                        </select>                      
+                    </td>                    
+                    <td>
+                        <button id= "bt3" type="button" onclick="ledCommand(3)" disabled>run</button>
+                    </td>
+                    <td></td>                    
+                </tr>	
+
+                <tr>
+                    <td>LED channel 4</td>
+                    <td>
+                        <label>select color:</label>
+                        <select id="ch4" disabled>
+                            <option value="black">Off</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="blue">Blue</option>
+                            <option value="white">White</option>                             
+                        </select>  
+                    </td>                    
+                    <td>
+                        <button id= "bt4" type="button" onclick="ledCommand(4)" disabled>run</button>
+                    </td>
+                    <td></td>                    
+                </tr> 
+                <tr>
+                    <td>Read tamper switch</td>
+                    <td></td>                    
+                    <td>
+                        <button id= "bt5" type="button" onclick="sensorCommand(5)" disabled>run</button>
+                    </td>
+                    <td></td>                    
+                </tr> 
+                <tr>
+                    <td>Read top level sensor</td>
+                    <td></td>                    
+                    <td>
+                        <button id= "bt6" type="button" onclick="sensorCommand(6)" disabled>run</button>
+                    </td>
+                    <td></td>                    
+                </tr>
+                <tr>
+                    <td>Read bottom level sensor</td>
+                    <td></td>                    
+                    <td>
+                        <button id= "bt7" type="button" onclick="sensorCommand(7)" disabled>run</button>
+                    </td>
+                    <td></td>                    
+                </tr>
+                <tr>
+                    <td>Firmware version</td>
+                    <td></td>                    
+                    <td></td>
+                    <td></td>                    
+                </tr>
+                <tr>
+                    <td>Firmware date</td>
+                    <td></td>                    
+                    <td></td>
+                    <td></td>                    
+                </tr> 
+                <tr>
+                    <td>Product model</td>
+                    <td></td>                    
+                    <td></td>
+                    <td></td>                     
+                </tr>
+                <tr>
+                    <td>Product Name</td>
+                    <td></td>                    
+                    <td></td>
+                    <td></td>                     
+                </tr> 
+            </tbody>
+        </table>
+        
+        <script>
+            const agent = window.Agent;
+            let tableID = document.getElementById("commandsTable").getElementsByTagName("td");
+            resetUI();
+
+            async function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            
+            async function resetUI() {               
+                await sleep(5000);
+                for (let i = 1; i<5; i++) {
+                    await ledCommand(i);
+                }
+                
+                for (let i=8; i<12; i++) {
+                    await boardCommand(i)
+                }
+                
+                document.getElementById('header').innerHTML = '<h2>LEDs - Sensors test app</h2>';
+                document.getElementById('ch1').disabled = false;
+                document.getElementById('ch2').disabled = false;
+                document.getElementById('ch3').disabled = false;
+                document.getElementById('ch4').disabled = false;
+                document.getElementById('bt1').disabled = false;
+                document.getElementById('bt2').disabled = false;
+                document.getElementById('bt3').disabled = false;
+                document.getElementById('bt4').disabled = false;
+                document.getElementById('bt5').disabled = false;
+                document.getElementById('bt6').disabled = false;
+                document.getElementById('bt7').disabled = false;                
+            }
+
+            async function ledCommand(ch) {
+                let id = '';
+                switch (ch) {
+                    case 1:
+                        id = 'ch1';
+                        break;
+                    case 2:
+                        id = 'ch2';
+                        break;
+                    case 3:
+                        id = 'ch3';
+                        break;
+                    case 4:
+                        id = 'ch4';                        
+                }
+                let w = document.getElementById(id);
+                let x = w.options[w.selectedIndex].value;
+                let y = w.options[w.selectedIndex].text;
+                let result = true;
+
+                switch (x) {
+                    case 'red':
+                        tableID[(4 * ch) - 1].style.color = '#FFFFFF';
+                        try { 
+                            result = await agent.Peripherals.LED.toggleAllOn(ch, await agent.Peripherals.LED.MakeColor(255, 0, 0, 0));
+                        } catch (e){
+                            console.log(e);
+                            result = false;
+                        }
+                    break;
+                    
+                    case 'green':
+                        tableID[(4 * ch) - 1].style.color = '#FFFFFF';
+                        try { 
+                            result = await agent.Peripherals.LED.toggleAllOn(ch, await agent.Peripherals.LED.MakeColor(0, 255, 0, 0));
+                        } catch (e){
+                            console.log(e);
+                            result = false;
+                        }                    
+                    break;
+                    
+                    case 'blue':
+                        tableID[(4 * ch) - 1].style.color = '#FFFFFF';
+                        try { 
+                            result = await agent.Peripherals.LED.toggleAllOn(ch, await agent.Peripherals.LED.MakeColor(0, 0, 255, 0));
+                        } catch (e){
+                            console.log(e);
+                            result = false;
+                        }                  
+                    break;
+                    
+                    case 'white':
+                        tableID[(4 * ch) - 1].style.color = '#000000';
+                        try { 
+                            result = await agent.Peripherals.LED.toggleAllOn(ch, await agent.Peripherals.LED.MakeColor(0, 0, 0, 255));
+                        } catch (e){
+                            console.log(e);
+                            result = false;
+                        }                    
+                    break;
+                    
+                    case 'black':
+                        tableID[(4 * ch) - 1].style.color = '#FFFFFF';
+                        try { 
+                            result = await agent.Peripherals.LED.toggleAllOn(ch, await agent.Peripherals.LED.MakeColor(0, 0, 0, 0));
+                        } catch (e){
+                            console.log(e);
+                            result = false;
+                        }                    
+                    break;                    
+                }
+                
+                if (result) {
+                    tableID[(4 * ch) - 1].innerHTML = y;
+                    tableID[(4 * ch) - 1].style.backgroundColor = x;
+                } else {
+                    tableID[(4 * ch) - 1].innerHTML = 'Error';
+                    tableID[(4 * ch) - 1].style.color = '#FFFFFF';
+                    tableID[(4 * ch) - 1].style.backgroundColor = 'red';                
+                }       
+            }
+            
+            async function boardCommand(num) {
+                let result = false;
+                let successfully = false;
+                switch (num) {
+                    case 8:
+                        try {
+                            result = await agent.Peripherals.LED.getFirmwareVersion();
+                            tableID[(4 * num) - 1].innerHTML = result.FirmwareVersion;
+                            successfully = true;
+                        } catch (e) {
+                            console.log(e);
+                        }
+                        break;
+                        
+                    case 9:
+                        try {
+                            result = await agent.Peripherals.LED.getFirmwareDate();
+                            tableID[(4 * num) - 1].innerHTML = result.FirmwareDate;
+                            successfully = true;                            
+                        } catch (e) {
+                            console.log(e);
+                        }
+                        break;
+                        
+                    case 10:
+                        try {
+                            result = await agent.Peripherals.LED.getBoardModel();
+                            tableID[(4 * num) - 1].innerHTML = result.Model;
+                            successfully = true;                            
+                        } catch (e) {
+                            console.log(e);
+                        }
+                        break;
+                        
+                    case 11:
+                        try {
+                            result = await agent.Peripherals.LED.getProductName();
+                            tableID[(4 * num) - 1].innerHTML = result.ProductName;
+                            successfully = true;                            
+                        } catch (e) {
+                            console.log(e);
+                        }                         
+                }                
+                if (successfully) {
+                    tableID[(4 * num) - 1].style.color = '#000000'; 
+                    tableID[(4 * num) - 1].style.backgroundColor = 'white';
+                } else {
+                    tableID[(4 * num) - 1].style.color = '#FFFFFF';
+                    tableID[(4 * num) - 1].style.backgroundColor = 'red'; 
+                    tableID[(4 * num) - 1].innerHTML = 'Error';                
+                }
+            }
+            
+            async function sensorCommand(num) {
+                let result = false;
+                let successfully = false;
+                switch (num) {
+                    case 5:
+                        try {
+                            result = await agent.Peripherals.Sensors.readTamperSwitch();
+                            tableID[(4 * num) - 1].innerHTML = result.TamperSwitch;
+                            successfully = true;
+                        } catch (e) {
+                            console.log(e);
+                        }
+                        break;
+                        
+                    case 6:
+                        try {
+                            result = await agent.Peripherals.Sensors.readTopLevelSensor();
+                            tableID[(4 * num) - 1].innerHTML = result.TopLevelSensor;
+                            successfully = true;                            
+                        } catch (e) {
+                            console.log(e);
+                        }
+                        break;
+                        
+                    case 7:
+                        try {
+                            result = await agent.Peripherals.Sensors.readBottomLevelSensor();
+                            tableID[(4 * num) - 1].innerHTML = result.BottomLevelSensor;
+                            successfully = true;                            
+                        } catch (e) {
+                            console.log(e);
+                        }                    
+                }                
+                if (successfully) {
+                    tableID[(4 * num) - 1].style.color = '#000000'; 
+                    tableID[(4 * num) - 1].style.backgroundColor = 'white';
+                } else {
+                    tableID[(4 * num) - 1].style.color = '#FFFFFF';
+                    tableID[(4 * num) - 1].style.backgroundColor = 'red'; 
+                    tableID[(4 * num) - 1].innerHTML = 'Error';                
+                }
+            }            
+            
+        </script>
+    </body>
+</html>
