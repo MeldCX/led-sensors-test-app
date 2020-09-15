@@ -155,13 +155,9 @@
             const agent = window.Agent;
             let tableID = document.getElementById("commandsTable").getElementsByTagName("td");
             resetUI();
-
-            async function sleep(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
             
             async function resetUI() {               
-                await sleep(5000);
+                await agent.onReadyAsync();
                 for (let i = 1; i<5; i++) {
                     await ledCommand(i);
                 }
@@ -181,7 +177,7 @@
                 document.getElementById('bt4').disabled = false;
                 document.getElementById('bt5').disabled = false;
                 document.getElementById('bt6').disabled = false;
-                document.getElementById('bt7').disabled = false;                
+                document.getElementById('bt7').disabled = false;
             }
 
             async function ledCommand(ch) {
