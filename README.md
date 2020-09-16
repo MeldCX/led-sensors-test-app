@@ -39,7 +39,8 @@ if all sensors are armed (back door closed and cards are full), you should get t
 [![Build Status](https://github.com/MeldCX/led-sensors-test-app/blob/master/images/6.jpg?raw=true)](https://www.meldcx.com/)
 
 ### Trigger a sensor
-Open the back door of the kiosk and click on run next to "Read tamper switch", you should get the following screen. (tamper switch true)
+Open the back door of the kiosk and click on run next to "Read tamper switch", you should get the following screen - tamper switch true.
+
 [![Build Status](https://github.com/MeldCX/led-sensors-test-app/blob/master/images/7.jpg?raw=true)](https://www.meldcx.com/)
 
 ### LEDs and Sensors board is not connected
